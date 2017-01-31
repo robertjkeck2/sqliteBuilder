@@ -20,15 +20,15 @@ class SqliteBuilder():
 			else:
 				primary_addition = ''
 			column = '{} {}{}'.format(column_setup[i][0], 
-				                            column_setup[i][1], 
-				                            primary_addition)
+				                  column_setup[i][1], 
+				                  primary_addition)
 			formatted_columns.append(column)
 
 		column_string = ', '.join(formatted_columns)
 		sql_function = 'CREATE TABLE'
 		sql_query = '{} {}({})'.format(sql_function,
-			                           tablename,
-			                           column_string)
+			                       tablename,
+			                       column_string)
 
         #Initialize database
 		conn = sqlite3.connect(self.db)
@@ -44,8 +44,8 @@ class SqliteBuilder():
 		
 		#New column setup
 		formatted_column = "{} ADD COLUMN {} {}".format(tablename,
-			                                              column_setup[0][0],
-			                                              column_setup[0][1])
+			                                        column_setup[0][0],
+			                                        column_setup[0][1])
 		sql_function = 'ALTER TABLE'
 		sql_query = '{} {}'.format(sql_function, formatted_column)
 		
