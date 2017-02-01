@@ -120,8 +120,17 @@ class SqliteBuilder():
 		conn.commit()
 		conn.close()
 
-	def query(self):
-		pass
+	def query(self, query):
+		
+		#Execute SQL query
+		conn = sqlite3.connect(self.db)
+		c = conn.cursor()
+		try:
+			c.execute(query)
+		except:
+			print("Error querying table.")
+		print(c.fetchall())
+		conn.close()
 
 a = SqliteBuilder('test_db.sqlite')
 d = 'test'
@@ -131,8 +140,10 @@ f = [("d", "TEXT")]
 g = [("b", 2),("c", 3),("d", 4)]
 h = [("b", 3),("c", 4),("d", 5)]
 i = [("a", 1),("b", 3),("c", 4),("d", 5)]
-a.create(d,c,e)
-a.add_column(d,f)
-a.add_row(d,g)
-a.add_row(d,h)
-a.update(d,i)
+q = 'SELECT * FROM test'
+#a.create(d,c,e)
+#a.add_column(d,f)
+#a.add_row(d,g)
+#a.add_row(d,h)
+#a.update(d,i)
+a.query(q)
