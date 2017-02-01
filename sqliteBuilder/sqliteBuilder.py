@@ -103,7 +103,7 @@ class SqliteBuilder():
 		#Updated row setup
 		update_vals = []
 		columns = [i[0] for i in row_setup]
-		values = [str(i[1]) for i in row_setup]
+		values = ["'" + str(i[1]) + "'" for i in row_setup]
 		for i in range(1,len(columns)):
 			col_vals = '{}={}'.format(columns[i], values[i])
 			update_vals.append(col_vals)
