@@ -12,8 +12,8 @@ class SqliteBuilder():
 	def create(self, tablename, column_setup, primary_key):
 		
 		#Initial table and columns setup
-		num_columns = len(column_setup)
 		formatted_columns = []
+		num_columns = len(column_setup)
 		for i in range(0, num_columns):
 			if (primary_key is True) and (i == 0):
 				primary_addition = ' PRIMARY KEY'
@@ -94,7 +94,33 @@ class SqliteBuilder():
 		conn.commit()
 		conn.close()
 
-	def update(self):
+	def update(self, tablename, row_setup):
+		
+		#Updated row setup
+		update_vals = []
+		columns = [i[0] for i in row_setup]
+		values = [str(i[1]) for i in row_setup]
+		for i in range(1,len(columns)):
+			col_vals = '{}={}'.format(columns[i], values[i])
+			update_vals.append(col_vals)
+		formatted_update_vals = ', '.join(update_vals)
+		update_function = 'UPDATE {} SET'.format(tablename)
+		update_query = '{} {} WHERE {}={}'.format(update_function,
+			                                      formatted_update_vals,
+			                                      columns[0],
+			                                      values[0])
+		
+		#Update row information
+		conn = sqlite3.connect(self.db)
+		c = conn.cursor()
+		try:
+			c.execute(update_query)
+		except:
+			print("Error updating row.")
+		conn.commit()
+		conn.close()
+
+	def query(self):
 		pass
 
 a = SqliteBuilder('test_db.sqlite')
@@ -104,7 +130,9 @@ c = [("a", "TEXT"),("b", "INTEGER"),("c", "INTEGER")]
 f = [("d", "TEXT")]
 g = [("b", 2),("c", 3),("d", 4)]
 h = [("b", 3),("c", 4),("d", 5)]
+i = [("a", 1),("b", 3),("c", 4),("d", 5)]
 a.create(d,c,e)
 a.add_column(d,f)
 a.add_row(d,g)
 a.add_row(d,h)
+a.update(d,i)
