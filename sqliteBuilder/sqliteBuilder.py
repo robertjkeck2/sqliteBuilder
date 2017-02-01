@@ -77,7 +77,7 @@ class SqliteBuilder():
 		#New row setup
 		columns = [i[0] for i in row_setup]
 		columns.insert(0, str(first_col))
-		values = [str(i[1]) for i in row_setup]
+		values = ["'" + str(i[1]) + "'" for i in row_setup]
 		values.insert(0, str(count[0][0] + 1))
 		formatted_columns = ', '.join(columns)
 		formatted_values = ', '.join(values)
@@ -86,6 +86,7 @@ class SqliteBuilder():
 			                                       tablename,
 			                                       formatted_columns,
 			                                       formatted_values)
+		print(insert_query)
 	
 		#Insert row to database
 		conn = sqlite3.connect(self.db)
@@ -102,7 +103,7 @@ class SqliteBuilder():
 		#Updated row setup
 		update_vals = []
 		columns = [i[0] for i in row_setup]
-		values = [str(i[1]) for i in row_setup]
+		values = ["'" + str(i[1]) + "'" for i in row_setup]
 		for i in range(1,len(columns)):
 			col_vals = '{}={}'.format(columns[i], values[i])
 			update_vals.append(col_vals)
@@ -144,4 +145,5 @@ class SqliteBuilder():
 		    table_title = 'TABLE: {}'.format(tablename)
 		    pretty_db = '{}\n{}\n{}'.format(db_title, table_title, df)
 		    print(pretty_db)
-		return results[0][0]
+		else:
+			return results[0][0]
