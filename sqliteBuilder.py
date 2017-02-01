@@ -106,9 +106,9 @@ class SqliteBuilder():
 		formatted_update_vals = ', '.join(update_vals)
 		update_function = 'UPDATE {} SET'.format(tablename)
 		update_query = '{} {} WHERE {}={}'.format(update_function,
-			                                      formatted_update_vals,
-			                                      columns[0],
-			                                      values[0])
+			                                  formatted_update_vals,
+			                                  columns[0],
+			                                  values[0])
 		
 		#Update row information
 		conn = sqlite3.connect(self.db)
