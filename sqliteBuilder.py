@@ -1,6 +1,9 @@
 #Built-ins
 import sqlite3
 
+#External imports
+import pandas as pd
+
 
 class SqliteBuilder():
 	"""
@@ -120,17 +123,28 @@ class SqliteBuilder():
 		conn.commit()
 		conn.close()
 
-	def query(self, query):
+	def query(self, tablename, query, to_print):
 		
 		#Execute SQL query
 		conn = sqlite3.connect(self.db)
 		c = conn.cursor()
+		c.execute('PRAGMA TABLE_INFO({})'.format(tablename))
+		col_names = [i[1] for i in c.fetchall()]
 		try:
 			c.execute(query)
 		except:
 			print("Error querying table.")
-		print(c.fetchall())
+		results = c.fetchall()
 		conn.close()
+
+		#Pretty print database
+		if to_print:
+		    df = pd.DataFrame(results, columns=col_names)
+		    db_title = 'DATABASE: {}'.format(self.db)
+		    table_title = 'TABLE: {}'.format(tablename)
+		    pretty_db = '{}\n{}\n{}'.format(db_title, table_title, df)
+		    print(pretty_db)
+		return results[0][0]
 
 a = SqliteBuilder('test_db.sqlite')
 d = 'test'
@@ -140,10 +154,11 @@ f = [("d", "TEXT")]
 g = [("b", 2),("c", 3),("d", 4)]
 h = [("b", 3),("c", 4),("d", 5)]
 i = [("a", 1),("b", 3),("c", 4),("d", 5)]
-q = 'SELECT * FROM test'
-#a.create(d,c,e)
-#a.add_column(d,f)
-#a.add_row(d,g)
-#a.add_row(d,h)
-#a.update(d,i)
-a.query(q)
+q = "SELECT b FROM test WHERE a=1"
+a.create(d,c,e)
+a.add_column(d,f)
+a.add_row(d,g)
+a.add_row(d,h)
+a.update(d,i)
+z = a.query(d, q, False)
+print(z)
